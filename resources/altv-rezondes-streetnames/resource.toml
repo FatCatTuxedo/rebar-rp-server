@@ -1,3 +1,0 @@
-client-files = [ 'client/*' ]
-client-main = 'client/client.js'
-type = 'js'

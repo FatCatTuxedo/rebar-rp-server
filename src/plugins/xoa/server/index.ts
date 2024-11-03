@@ -43,6 +43,7 @@ messenger.commands.register({
     desc: '- list your permissions',
     callback: async (player: alt.Player) => {
         listPermissions(player);
+        player.setSyncedMeta("me_msg", "*Ziva Toledo reaches for a weapon");
     },
 });
 messenger.commands.register({
@@ -50,6 +51,7 @@ messenger.commands.register({
     desc: 'revive',
     options: { permissions: ['admin'] },
     callback: async (player: alt.Player) => {
+        player.setSyncedMeta("death_message", "(( Injured ))");
         player.health = 200;
         player.spawn(player.pos);
     },

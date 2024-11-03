@@ -16,18 +16,12 @@ let labelEmotes = [];
 const emoteLabelColor = new alt.RGBA(194, 162, 218, 255);
 const descriptionLabelColor = new alt.RGBA(150, 1, 1, 255);
 const deathlabelColor = new alt.RGBA(182, 0, 0, 255);
-alt.on("syncedMetaChange", async (entity: alt.Entity, key: string, value: any, oldvalue?: any) =>
-{
-    if (entity instanceof alt.Player)
-    {
-    if (key == "me_label_desc")
-        handleLabelDataChange(entity, value, true);
-}
-});
-
-function handleLabelDataChange(entity, text, desc, checkForFoot?) {
-
+alt.onServer("handleLabelDataChange", (entity, text) => {
+    console.log(labelEmotes);
+    if (!alt.Player.getByID(entity))
+        return;
     let index = labelEmotes.findIndex(labelObject => labelObject.player === entity)
+    console.log("index " + index)
     if (index == -1) {
         var tempDestroyTimer = setTimeout(function () {
             let _index = labelEmotes.findIndex(labelObject => labelObject.player === entity)
@@ -35,13 +29,12 @@ function handleLabelDataChange(entity, text, desc, checkForFoot?) {
                 labelEmotes.splice(_index, 1)
         }, 5000)
 
-        labelEmotes.push({ tick: Date.now(), player: entity, text: text, color: (desc == true ? descriptionLabelColor : emoteLabelColor), destroyTimer: tempDestroyTimer, checkForFoot: checkForFoot })
+        labelEmotes.push({ tick: Date.now(), player: entity, text: text, color: emoteLabelColor, destroyTimer: tempDestroyTimer})
     }
     else {
         let label = labelEmotes.find(labelObject => labelObject.player === entity)
         label.text = text
-        label.color = (desc == true ? descriptionLabelColor : emoteLabelColor)
-        label.checkForFoot = checkForFoot
+        label.color = emoteLabelColor;
         label.tick = Date.now()
 
         if (typeof label.destroyTimer !== "undefined") clearTimeout(label.destroyTimer)
@@ -52,9 +45,7 @@ function handleLabelDataChange(entity, text, desc, checkForFoot?) {
                 labelEmotes.splice(index, 1);
         }, 5000)
     }
-}
-
-
+});
 // Draw nametags
 alt.everyTick(() => {
     if (lasthealth - alt.Player.local.health >= 5)
@@ -91,21 +82,27 @@ alt.everyTick(() => {
         const cname = player.getStreamSyncedMeta("nametag");
         if (!cname) return;
         if (color == "red")
-            drawText3D(`[${player.id}] ${fixName(cname)}`, { x, y, z }, size, new alt.RGBA(255,0,0));
+            drawText3D(4,`[${player.id}] ${fixName(cname)}`, { x, y, z }, size, new alt.RGBA(255,0,0));
         else
-            drawText3D(`[${player.id}] ${fixName(cname)}`, { x, y, z }, size, new alt.RGBA(255,255,255));
+            drawText3D(4,`[${player.id}] ${fixName(cname)}`, { x, y, z }, size, new alt.RGBA(255,255,255));
 
-            if (labelEmotes.findIndex(labelObject => labelObject.player === player) != -1) {
+            if (player.getSyncedMeta("death_message") && distance <= 150) {
+                
+                drawText3D(0,`${player.getSyncedMeta("death_message")}`, new alt.Vector3(x, y, z + 0.25), 0.4, deathlabelColor);
+            }
+            if (player.getSyncedMeta("me_msg"))
+            {
+                drawText3D(0,`${player.getSyncedMeta("me_msg")}`, new alt.Vector3(x, y, z + 0.1), 0.4, emoteLabelColor);
+            }
+            if (labelEmotes.findIndex(labelObject => labelObject.player === player.id) != -1) {
 
-                let labelObject = labelEmotes.find(labelObject => labelObject.player === player);
+                let labelObject = labelEmotes.find(labelObject => labelObject.player === player.id);
 
                 if (labelObject != null && labelObject != undefined) {
                     if (Date.now() - labelObject.tick < 5000) {
-                        if (!labelObject.checkForFoot || !player.vehicle) {
-                            alt.Utils.drawText2dThisFrame(labelObject.text, new alt.Vector2(x, y - 0.025), 0, 0.4, labelObject.color,true, false, alt.TextAlign.Center);
-                        }
+                            drawText3D(0,`*${fixName(cname)} ${labelObject.text}`, new alt.Vector3(x, y, z + 0.1), 0.4, emoteLabelColor);
                     } else {
-                        let index = labelEmotes.findIndex(labelObject => labelObject.player === player)
+                        let index = labelEmotes.findIndex(labelObject => labelObject.player === player.id)
                         if (index > -1)
                             labelEmotes.splice(index, 1)
                     }
@@ -115,7 +112,7 @@ alt.everyTick(() => {
 });
 
 
-function drawText3D(text: string, pos: alt.IVector3, scale: number, color: alt.RGBA, offset = alt.Vector2.zero) {
+function drawText3D(font: number, text: string, pos: alt.IVector3, scale: number, color: alt.RGBA, offset = alt.Vector2.zero) {
     if (scale > 2) {
         scale = 2;
     }
@@ -123,7 +120,7 @@ function drawText3D(text: string, pos: alt.IVector3, scale: number, color: alt.R
     native.setDrawOrigin(pos.x, pos.y, pos.z, false);
     native.beginTextCommandDisplayText('STRING');
     native.addTextComponentSubstringPlayerName(text);
-    native.setTextFont(4);
+    native.setTextFont(font);
     native.setTextScale(1, scale);
     native.setTextColour(color.r, color.g, color.b, color.a);
     native.setTextOutline();
