@@ -32,6 +32,9 @@ importers:
       node-cron:
         specifier: ^3.0.3
         version: 3.0.3
+      openmeteo:
+        specifier: ^1.1.4
+        version: 1.1.4
       sjcl:
         specifier: ^1.0.8
         version: 1.0.8
@@ -53,7 +56,7 @@ importers:
         version: 16.2.6(@altv/types-shared@16.2.3)(@altv/types-worker@16.2.0)
       '@altv/types-natives':
         specifier: ^16.2.1
-        version: 16.2.1(@altv/types-client@16.2.6(@altv/types-shared@16.2.3)(@altv/types-worker@16.2.0))
+        version: 16.2.1(@altv/types-client@16.2.6)
       '@altv/types-server':
         specifier: ^16.2.4
         version: 16.2.4(@altv/types-shared@16.2.3)
@@ -340,6 +343,10 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@openmeteo/sdk@1.18.0':
+    resolution: {integrity: sha512-rcx3dY4kC3KHndHi4gETJi3QpETf/GriaktoG47YVEMbZ0lXm8G9Ki8qWasXWogSP15F6REET4Z+E/aPw86Crw==}
+    engines: {node: '>=12.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -710,6 +717,9 @@ packages:
     resolution: {integrity: sha512-MdYSsbdCaIRjzo5edthZtWmEZVMfr1qrtYZUHIdO3swCE+CoZA8S5l0s4jDsYlTa9ZiXv0pTgpzE7s4N8NeUOA==}
     engines: {node: '>=18'}
 
+  flatbuffers@24.3.25:
+    resolution: {integrity: sha512-3HDgPbgiwWMI9zVB7VYBHaMrbOO7Gm0v+yD2FV/sCKj+9NDeVL7BOBYUuhWAQGKWOzBo8S9WdMvV0eixO233XQ==}
+
   foreground-child@3.3.0:
     resolution: {integrity: sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==}
     engines: {node: '>=14'}
@@ -986,6 +996,10 @@ packages:
   onetime@6.0.0:
     resolution: {integrity: sha512-1FlR+gjXK7X+AsAHso35MnyN5KqGwJRi/31ft6x0M194ht7S+rWAvd7PHss9xSKMzE0asv1pyIHaJYq+BbacAQ==}
     engines: {node: '>=12'}
+
+  openmeteo@1.1.4:
+    resolution: {integrity: sha512-TalTDl0M7JJoeRTf+rWiFZ9SLvoxm7KkFLOQqcSjCiYs+bVMhax1qtryJqeZ1RF4W4Xfsgcl9x+VC1z39ULCxA==}
+    engines: {node: '>=12.0'}
 
   package-json-from-dist@1.0.0:
     resolution: {integrity: sha512-dATvCeZN/8wQsGywez1mzHtTlP22H8OEfPrVMLNr4/eGa+ijtLn/6M5f0dY8UKNrC2O9UCU6SSoG3qRKnt7STw==}
@@ -1468,7 +1482,7 @@ snapshots:
       '@altv/types-shared': 16.2.3
       '@altv/types-worker': 16.2.0(@altv/types-client@16.2.6)
 
-  '@altv/types-natives@16.2.1(@altv/types-client@16.2.6(@altv/types-shared@16.2.3)(@altv/types-worker@16.2.0))':
+  '@altv/types-natives@16.2.1(@altv/types-client@16.2.6)':
     dependencies:
       '@altv/types-client': 16.2.6(@altv/types-shared@16.2.3)(@altv/types-worker@16.2.0)
 
@@ -1616,6 +1630,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  '@openmeteo/sdk@1.18.0':
+    dependencies:
+      flatbuffers: 24.3.25
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -2033,6 +2051,8 @@ snapshots:
       ps-list: 8.1.1
       taskkill: 5.0.0
 
+  flatbuffers@24.3.25: {}
+
   foreground-child@3.3.0:
     dependencies:
       cross-spawn: 7.0.3
@@ -2245,6 +2265,11 @@ snapshots:
   onetime@6.0.0:
     dependencies:
       mimic-fn: 4.0.0
+
+  openmeteo@1.1.4:
+    dependencies:
+      '@openmeteo/sdk': 1.18.0
+      flatbuffers: 24.3.25
 
   package-json-from-dist@1.0.0: {}
 

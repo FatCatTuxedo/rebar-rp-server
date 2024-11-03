@@ -4,7 +4,7 @@ import { Events } from '../../src/main/shared/events/index.js';
 import { Message } from '../../src/main/shared/types/message.js';
 
 const MAXIMUM_MESSAGES = 256;
-const messages = ref<Message[]>([{ type: 'info', content: 'Rebar Started', timestamp: Date.now() }]);
+const messages = ref<Message[]>([{ type: 'info', content: 'Welcome to Xoa', timestamp: Date.now() }]);
 const events = useEvents();
 let isInit = false;
 
